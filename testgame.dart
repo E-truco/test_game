@@ -129,6 +129,14 @@ void round(Game game){
     print('Winner players are: ');
     print(game.teams[winningTeam][0].name);
     print(game.teams[winningTeam][1].name);
+    
+    print('|-------------------------|');
+    stdout.write('Press enter to continue: ');
+
+    // detect key press
+    stdin.readLineSync();
+
+    clearTerminal();
 
   } // round ends (3 wins for game win)
 
