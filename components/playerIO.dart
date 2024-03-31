@@ -45,7 +45,7 @@ Player createPlayer(){
   print("Name: $name");
   print("-----------------------");
 
-  Player player = new Player(id, 'player', 0, []);
+  Player player = new Player(id, name, 0, []);
   return player;
 
 }
