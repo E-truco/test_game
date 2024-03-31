@@ -80,6 +80,7 @@ void round(Game game){
     // i will also need to create a pile
     // and also code a system to check if card is stronger than other
     // and also make a system to organize the pile
+    // also need to find manilha
 
 
 
