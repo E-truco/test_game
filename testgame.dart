@@ -5,6 +5,8 @@ import "./components/playerIO.dart";
 
 import "dart:io";
 
+import "components/cardpile.dart";
+
 class Game{
 
   List<List> teams = [];
@@ -28,73 +30,95 @@ void clearTerminal(){
 
 
 void round(Game game){
+
+  // check if any of the teams have reached 2 points by checking the amount of points of the first player of that team
+  // when the while loop ends, a team will have won the round
+  while(game.teams[0][0].points < 2 && game.teams[1][0].points < 2){
+
+    List<Card> pile = [];
   
-  // amount of players in the game = amount of teams * amount of players per team
-  int amountOfPlayers = game.teams.length * game.teams[0].length;
-  int currentTeam = 0;
+    // amount of players in the game = amount of teams * amount of players per team
+    int amountOfPlayers = game.teams.length * game.teams[0].length;
+    int currentTeam = 0;
 
-  // this will run for amountOfPlayers times, each time it runs, one player makes a play
-  for(int i = 0; i < amountOfPlayers; i++){
+    // this will run for amountOfPlayers times, each time it runs, one player makes a play
+    for(int i = 0; i < amountOfPlayers; i++){
+
+      clearTerminal();
+
+      // order will be: first player from team A -> first player from team B -> second player from team A -> second player from team B
+      Player currentPlayer = game.teams[currentTeam][(i/2).floor()];
+      String currentPlayerName = currentPlayer.name;
+
+      print("==============================================");
+      print("It's $currentPlayerName turn.");
+      print("NO ONE ELSE SHOULD LOOK AT THE SCREEN NOW. ");
+      print("==============================================");
+      stdout.write("Press enter when only $currentPlayerName is looking: ");
+
+      // detect key press
+      stdin.readLineSync();
+
+      clearTerminal();
+
+      print("==============================================");
+      print("It's $currentPlayerName turn.");
+      print("----------------------------------------------");
+      print("Your cards are: ");
+      print(currentPlayer.hand);
+      print("----------------------------------------------");
+      stdout.write("Choose a card to play by typing it's index (starting on 0): ");
+
+      String? inputCard = stdin.readLineSync();
+      int choosenCard;
+
+      // test if choosen card isnt null and is less than the hand's length
+      if(inputCard != null && int.parse(inputCard) < currentPlayer.hand.length){
+
+        choosenCard = int.parse(inputCard);
+
+      }else{
+        choosenCard = 0;
+      }
+
+      // assign the current team as the owner of the choosen card for win check later
+      currentPlayer.hand[choosenCard].teamOwner = currentTeam;
+
+      // remove the choosen card from the hand
+      currentPlayer.hand.removeAt(choosenCard);
+
+      // add card to pile
+      addToPile(pile, currentPlayer.hand[choosenCard]);
+
+      // alternate between the teams
+      if(currentTeam == 0){
+        currentTeam = 1;
+      }else{
+        currentTeam = 0;
+      }
+
+    } // play ends (2 wins for round win)
+
+    // assign points to the team that won the round
+
+    int winningTeam = pile[0].teamOwner;
+
+    // give one point to both players on that team
+    game.teams[winningTeam][0].points += 1;
+    game.teams[winningTeam][1].points += 1;
 
     clearTerminal();
 
-    // order will be: first player from team A -> first player from team B -> second player from team A -> second player from team B
-    Player currentPlayer = game.teams[currentTeam][(i/2).floor()];
-    String currentPlayerName = currentPlayer.name;
+    print('|=========================|');
+    print('|       Play Ended.       |');
+    print('|-------------------------|');
+    print('Winner players are: ');
+    print(game.teams[winningTeam][0].name);
+    print(game.teams[winningTeam][1].name);
 
-    print("==============================================");
-    print("It's $currentPlayerName turn.");
-    print("NO ONE ELSE SHOULD LOOK AT THE SCREEN NOW. ");
-    print("==============================================");
-    stdout.write("Press enter when only $currentPlayerName is looking: ");
+  } // round ends (3 wins for game win)
 
-    // detect key press
-    stdin.readLineSync();
-
-    clearTerminal();
-
-    print("==============================================");
-    print("It's $currentPlayerName turn.");
-    print("----------------------------------------------");
-    print("Your cards are: ");
-    print(currentPlayer.hand);
-    print("----------------------------------------------");
-    stdout.write("Choose a card to play by typing it's index (starting on 0): ");
-
-    String? inputCard = stdin.readLineSync();
-    int choosenCard;
-
-    // test if choosen card isnt null and is less than the hand's length
-    if(inputCard != null && int.parse(inputCard) < currentPlayer.hand.length){
-
-      choosenCard = int.parse(inputCard);
-
-    }else{
-      choosenCard = 0;
-    }
-
-    // remove the choosen card from the hand
-    currentPlayer.hand.removeAt(choosenCard);
-
-    // add card to the pile
-    // i will also need to create a pile
-    // and also code a system to check if card is stronger than other
-    // and also make a system to organize the pile
-    // also need to find manilha
-
-
-
-
-
-
-
-    // alternate between the teams
-    if(currentTeam == 0){
-      currentTeam = 1;
-    }else{
-      currentTeam = 0;
-    }
-  }
+  print('round ended.');
   
 }
 
@@ -169,5 +193,20 @@ void main(){
 
   // create game
   Game game = new Game([[p1, p3], [p2, p4]]);
+
+
+  clearTerminal();
+
+  print('|=========================|');
+  print('|  New Round Starting...  |');
+  print('|=========================|');
+  stdout.write('Press enter to continue: ');
+
+  // detect key press
+  stdin.readLineSync();
+
+  clearTerminal();
+
+  round(game);
 
 }

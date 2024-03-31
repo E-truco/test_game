@@ -4,6 +4,7 @@ class Card {
   late String suit;
   late int trueValue;
   late int suitValue;
+  late int teamOwner;
 
   Card(this.value, this.suit, this.trueValue, this.suitValue);
 
