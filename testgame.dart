@@ -200,7 +200,7 @@ void main(){
   List<Card> deck = deckgen(["4", "5", "6", "7", "10", "11", "12", "1", "2", "3"], ["Moles", "Espadas", "Copas", "Paus"]);
 
   // shuffle deck
-  shuffler(deck, 1);
+  deck = shuffler(deck, 1);
 
   // croupier
   croupier([p1, p2, p3, p4], 3, deck);
