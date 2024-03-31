@@ -29,6 +29,21 @@ void clearTerminal(){
 }
 
 
+void displayHand(List<Card> hand){
+
+  print("--------------");
+  print("  Your hand:  ");
+  print("--------------");
+
+  for(int i = 0; i < hand.length; i++){
+    Card currentCard = hand[i];
+    print(" $i | $currentCard");
+  }
+
+  print("--------------");
+}
+
+
 void round(Game game){
 
   // check if any of the teams have reached 2 points by checking the amount of points of the first player of that team
@@ -64,16 +79,15 @@ void round(Game game){
       print("==============================================");
       print("It's $currentPlayerName turn.");
       print("----------------------------------------------");
-      print("Your cards are: ");
-      print(currentPlayer.hand);
+      displayHand(currentPlayer.hand);
       print("----------------------------------------------");
-      stdout.write("Choose a card to play by typing it's index (starting on 0): ");
+      stdout.write("Choose a card to play by typing it's index: ");
 
       String? inputCard = stdin.readLineSync();
       int choosenCard;
 
       // test if choosen card isnt null and is less than the hand's length
-      if(inputCard != null && int.parse(inputCard) < currentPlayer.hand.length){
+      if(inputCard != null){
 
         choosenCard = int.parse(inputCard);
 
@@ -84,11 +98,11 @@ void round(Game game){
       // assign the current team as the owner of the choosen card for win check later
       currentPlayer.hand[choosenCard].teamOwner = currentTeam;
 
-      // remove the choosen card from the hand
-      currentPlayer.hand.removeAt(choosenCard);
-
       // add card to pile
       addToPile(pile, currentPlayer.hand[choosenCard]);
+
+      // remove the choosen card from the hand
+      currentPlayer.hand.removeAt(choosenCard);
 
       // alternate between the teams
       if(currentTeam == 0){
