@@ -27,6 +27,77 @@ void clearTerminal(){
 }
 
 
+void round(Game game){
+  
+  // amount of players in the game = amount of teams * amount of players per team
+  int amountOfPlayers = game.teams.length * game.teams[0].length;
+  int currentTeam = 0;
+
+  // this will run for amountOfPlayers times, each time it runs, one player makes a play
+  for(int i = 0; i < amountOfPlayers; i++){
+
+    clearTerminal();
+
+    // order will be: first player from team A -> first player from team B -> second player from team A -> second player from team B
+    Player currentPlayer = game.teams[currentTeam][(i/2).floor()];
+    String currentPlayerName = currentPlayer.name;
+
+    print("==============================================");
+    print("It's $currentPlayerName turn.");
+    print("NO ONE ELSE SHOULD LOOK AT THE SCREEN NOW. ");
+    print("==============================================");
+    stdout.write("Press enter when only $currentPlayerName is looking: ");
+
+    // detect key press
+    stdin.readLineSync();
+
+    clearTerminal();
+
+    print("==============================================");
+    print("It's $currentPlayerName turn.");
+    print("----------------------------------------------");
+    print("Your cards are: ");
+    print(currentPlayer.hand);
+    print("----------------------------------------------");
+    stdout.write("Choose a card to play by typing it's index (starting on 0): ");
+
+    String? inputCard = stdin.readLineSync();
+    int choosenCard;
+
+    // test if choosen card isnt null and is less than the hand's length
+    if(inputCard != null && int.parse(inputCard) < currentPlayer.hand.length){
+
+      choosenCard = int.parse(inputCard);
+
+    }else{
+      choosenCard = 0;
+    }
+
+    // remove the choosen card from the hand
+    currentPlayer.hand.removeAt(choosenCard);
+
+    // add card to the pile
+    // i will also need to create a pile
+    // and also code a system to check if card is stronger than other
+    // and also make a system to organize the pile
+
+
+
+
+
+
+
+    // alternate between the teams
+    if(currentTeam == 0){
+      currentTeam = 1;
+    }else{
+      currentTeam = 0;
+    }
+  }
+  
+}
+
+
 void main(){
 
   print('|=========================|');
@@ -85,7 +156,6 @@ void main(){
   // detect key press
   stdin.readLineSync();
   
-
 
   // create deck
   List<Card> deck = deckgen(["4", "5", "6", "7", "10", "11", "12", "1", "2", "3"], ["Moles", "Espadas", "Copas", "Paus"]);
