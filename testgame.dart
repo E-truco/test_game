@@ -1,6 +1,7 @@
 import "./components/deckgen.dart";
 import "./components/shuffler.dart";
 import "./components/croupier.dart";
+import "./components/playerIO.dart";
 
 class Game{
 
@@ -14,11 +15,6 @@ class Game{
 }
 
 
-Player createPlayer(int id){
-  return new Player(id, 0, []);
-}
-
-
 void main(){
 
   print('=============');
@@ -26,15 +22,14 @@ void main(){
   print('-------------');
   print('| test game |');
   print('=============');
-  print('Game setup must be hard coded.');
 
 
   // create players
   // teams will be: p1 and p3 / p2 and p4
-  Player p1 = new Player(1, 0, []);
-  Player p2 = new Player(2, 0, []);
-  Player p3 = new Player(3, 0, []);
-  Player p4 = new Player(4, 0, []);
+  Player p1 = createPlayer();
+  Player p2 = createPlayer();
+  Player p3 = createPlayer();
+  Player p4 = createPlayer();
 
 
   // create deck
