@@ -1,7 +1,7 @@
 
 import "deckgen.dart";
 
-int compare(List<Card> cards){
+int cardbattle(List<Card> cards){
 
   int face1 = cards[0].trueValue;
   int face2 = cards[1].trueValue;
