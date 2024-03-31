@@ -49,7 +49,4 @@ void main(){
   // create game
   Game game = new Game([[p1, p3], [p2, p4]]);
 
-
-  // FIGURE OUT HOW TO MAKE IO WORK (currently, dart only runs on debug mode)
-
 }
