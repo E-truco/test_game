@@ -5,13 +5,14 @@ import "shuffler.dart";
 
 class Player{
   late int id;
+  late String name;
   late int points;
   late List<Card> hand;
 
-  Player(this.id, this.points, this.hand);
+  Player(this.id, this.name, this.points, this.hand);
 
   @override
-  String toString() => "ID: $id | Points: $points | Hand: $hand";
+  String toString() => "ID: $id | Name: $name | Points: $points | Hand: $hand";
 }
 
 
@@ -72,8 +73,8 @@ void main(){
   print("Shuffled Deck:");
   shuffledDeck.forEach(print);
 
-  Player p1 = new Player(1, 0, []);
-  Player p2 = new Player(2, 0, []);
+  Player p1 = new Player(1, 'player1', 0, []);
+  Player p2 = new Player(2, 'player2', 0, []);
 
   var croupierOutput = croupier([p1, p2], 3, shuffledDeck);
 

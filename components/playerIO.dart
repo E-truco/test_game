@@ -26,7 +26,7 @@ Player createPlayer(){
   print("Player created. ID: $id");
   print("-----------------------");
 
-  Player player = new Player(id, 0, []);
+  Player player = new Player(id, 'player', 0, []);
   return player;
 
 }
