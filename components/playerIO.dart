@@ -1,6 +1,7 @@
 import "croupier.dart";
 
 import "dart:io";
+import "dart:math";
 
 
 Player createPlayer(){
@@ -16,13 +17,15 @@ Player createPlayer(){
   String? inputID = stdin.readLineSync();
 
   // test if player ID isn't null
-  if(inputID != null){
+  if(inputID != null && inputID != ''){
 
     id = int.parse(inputID);
 
   }else{
 
-    throw Exception("Please insert a valid integer ID.");
+    Random random = new Random(DateTime.now().microsecondsSinceEpoch);
+
+    id = random.nextInt(99);
   }
 
   // ask for player name
@@ -30,13 +33,13 @@ Player createPlayer(){
   String? inputName = stdin.readLineSync();
 
   // test if player name isn't null
-  if(inputName != null){
+  if(inputName != null && inputName != ''){
 
     name = inputName;
 
   }else{
 
-    name = "name";
+    name = "Player$id";
   }
 
   print("-----------------------");
