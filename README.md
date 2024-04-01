@@ -1,24 +1,9 @@
------
+# E-Truco Test Game
+## This is a terminal-ran test version of our truco game, with focus on game logic.
 
-### Setup
+### To run:
 
-- create players
-- create deck / shuffle deck
-- create a game with the players and the deck
-- croupier
-
------
-
-### All players now have their cards
-
-- start round
-
-- give points
-
-- check if game ended
-
------
-
-### Round is complete, repeat
-
------
+- Open the terminal
+- CD into the repo's folder
+- Use the command: dart testgame.dart
+- Follow the instructions
