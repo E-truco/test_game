@@ -64,10 +64,12 @@ void round(Game game){
       Player currentPlayer = game.teams[currentTeam][(i/2).floor()];
       String currentPlayerName = currentPlayer.name;
 
-      print("==============================================");
+      print("==========================================================");
+      print('New Play Starting... (Best of 3 plays wins the round)');
+      print("==========================================================");
       print("It's $currentPlayerName turn.");
       print("NO ONE ELSE SHOULD LOOK AT THE SCREEN NOW. ");
-      print("==============================================");
+      print("==========================================================");
       stdout.write("Press enter when only $currentPlayerName is looking: ");
 
       // detect key press
@@ -128,14 +130,24 @@ void round(Game game){
 
     clearTerminal();
 
-    print('|=========================|');
-    print('|       Play Ended.       |');
-    print('|-------------------------|');
-    print('Winner players are: ');
-    print(game.teams[winningTeam][0].name);
-    print(game.teams[winningTeam][1].name);
-    
-    print('|-------------------------|');
+    String winner1 = game.teams[winningTeam][0].name;
+    String winner2 = game.teams[winningTeam][1].name;
+
+    String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
+    String team2 = game.teams[1][0].name + ' and ' + game.teams[1][1].name;
+    var team1Pts = game.teams[0][0].points;
+    var team2Pts = game.teams[1][0].points;
+
+    print('|===========================================|');
+    print('|                Play Ended.                |');
+    print('|-------------------------------------------|');
+    print('| Winner team is: $winner1 and $winner2');
+    print('|===========================================|');
+    print('| First to 2 points wins. Points per team:');
+    print('| Team $team1 -> $team1Pts');
+    print('| Team $team2 -> $team2Pts');
+    print('|-------------------------------------------|');
+
     stdout.write('Press enter to continue: ');
 
     // detect key press
