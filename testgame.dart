@@ -31,16 +31,15 @@ void clearTerminal(){
 
 void displayHand(List<Card> hand){
 
-  print("--------------");
-  print("  Your hand:  ");
-  print("--------------");
+  print("Your hand:");
+  print("----------------------------------------------");
 
   for(int i = 0; i < hand.length; i++){
     Card currentCard = hand[i];
     print(" $i | $currentCard");
   }
 
-  print("--------------");
+  print("----------------------------------------------");
 }
 
 
@@ -77,10 +76,16 @@ void round(Game game){
       clearTerminal();
 
       print("==============================================");
-      print("It's $currentPlayerName turn.");
-      print("----------------------------------------------");
+      print("It's $currentPlayerName's turn.");
+      print("==============================================");
+
+      if(pile.length > 0){
+        Card topOfPile = pile[0];
+        print("Top of the pile: $topOfPile");
+        print("----------------------------------------------");
+      }
+
       displayHand(currentPlayer.hand);
-      print("----------------------------------------------");
       stdout.write("Choose a card to play by typing it's index: ");
 
       String? inputCard = stdin.readLineSync();
