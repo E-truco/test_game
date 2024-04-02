@@ -268,6 +268,12 @@ void round(Game game){
 }
 
 
+void gameHandler(Game game){
+
+
+}
+
+
 void main(){
 
   print('|=========================|');
@@ -350,6 +356,12 @@ void main(){
 
 
   clearTerminal();
+
+  // instead of starting a round, start a game via gameHandler()
+  // game will have part of the logic that is currently on this main function, as each game will have a different deck
+  // game will start a round and keep track of rounds won
+  // round will keep track of truco calls
+  // round should return the winning team and also the amount of points that team got
 
   // start a round
   round(game);
