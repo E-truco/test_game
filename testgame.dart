@@ -11,8 +11,9 @@ class Game{
 
   List<List> teams = [];
   int currentRound = 0;
+  late String manilha;
 
-  Game(this.teams);
+  Game(this.teams, this.manilha);
 
   @override
   String toString() => "Round: $currentRound | Teams: $teams";
@@ -42,6 +43,54 @@ void displayHand(List<Card> hand){
   print("----------------------------------------------");
 }
 
+
+// this will return the face of the manilha for the "card"
+// "card" should be the first card on the shuffled deck AFTER the croupier dealt 3 cards to each player
+String manilhaFinder(Card card){
+  
+  // if the selected card is 3, AKA the strongest card
+  if(card.value == '3'){
+
+    return '4';
+
+  }else{
+
+    return (int.parse(card.value) + 1).toString();
+
+  }
+}
+
+// this solution is not pretty but I only remembered about manilhas now so i have to improvise
+// on the actual game this will be improved
+void manilhaUpdater(Game game){
+
+  // create a list with all players
+  // again, there are better ways to do this but I didnt plan ahead so this will do.
+  List<Player> players = [];
+  players.add(game.teams[0][0]);
+  players.add(game.teams[0][1]);
+  players.add(game.teams[1][0]);
+  players.add(game.teams[1][1]);
+
+  // go through every player, check if the have a manilha and if they do, update the trueValue of that card
+  // player loop
+  for(int p = 0; p < players.length; p++){
+
+    // current player's hand loop
+    for(int c = 0; c < players[p].hand.length; c++){
+      
+      // if they have a manilha
+      if(players[p].hand[c].value == game.manilha){
+
+        players[p].hand[c].trueValue = 11;
+
+      }
+      // else do nothing
+
+    }
+  }
+
+}
 
 void round(Game game){
 
@@ -80,12 +129,16 @@ void round(Game game){
       print("==============================================");
       print("It's $currentPlayerName's turn.");
       print("==============================================");
-
+  
       if(pile.length > 0){
         Card topOfPile = pile[0];
         print("Top of the pile: $topOfPile");
         print("----------------------------------------------");
       }
+
+      var tempManilha = game.manilha;
+      print('| Manilha: $tempManilha');
+      print("----------------------------------------------");
 
       displayHand(currentPlayer.hand);
       stdout.write("Choose a card to play by typing it's index: ");
@@ -106,7 +159,19 @@ void round(Game game){
       currentPlayer.hand[choosenCard].teamOwner = currentTeam;
 
       // add card to pile
-      addToPile(pile, currentPlayer.hand[choosenCard]);
+
+      // if card is manilha, suit will be checked in case of a tie
+      if(currentPlayer.hand[choosenCard].value == game.manilha){
+
+        addToPile(pile, currentPlayer.hand[choosenCard], true);
+
+      // if card is NOT manilha, suit will NOT be checked in case of a tie
+      }else{
+
+        addToPile(pile, currentPlayer.hand[choosenCard], false);
+
+      }
+      
 
       // remove the choosen card from the hand
       currentPlayer.hand.removeAt(choosenCard);
@@ -122,26 +187,52 @@ void round(Game game){
 
     // assign points to the team that won the round
 
-    int winningTeam = pile[0].teamOwner;
+    // check if there's a tie (if the first and second card of the pile, counting top-down, have the same face value and are not manilhas)
+    // there might be a better way to write this if but it's 1am and i'm not thinking straight
+    // if there's a tie, give one point to both teams
+    if(pile[0].trueValue == pile[1].trueValue && pile[0].trueValue != 11 && pile[1].trueValue != 11){
 
-    // give one point to both players on that team
-    game.teams[winningTeam][0].points += 1;
-    game.teams[winningTeam][1].points += 1;
+      game.teams[0][0].point += 1;
+      game.teams[0][1].point += 1;
+      game.teams[1][0].point += 1;
+      game.teams[1][1].point += 1;
 
-    clearTerminal();
+      clearTerminal();
+      
+      print('|===========================================|');
+      print('|                Play Ended.                |');
+      print('|-------------------------------------------|');
+      print('|              THERE IS A TIE!              |');
+      print('|===========================================|');
 
-    String winner1 = game.teams[winningTeam][0].name;
-    String winner2 = game.teams[winningTeam][1].name;
+
+      // if there ISN'T a tie, give a point to the winner
+    }else{
+
+      int winningTeam = pile[0].teamOwner;
+
+      // give one point to both players on that team
+      game.teams[winningTeam][0].points += 1;
+      game.teams[winningTeam][1].points += 1;
+
+      clearTerminal();
+
+      String winner1 = game.teams[winningTeam][0].name;
+      String winner2 = game.teams[winningTeam][1].name;
+
+      print('|===========================================|');
+      print('|                Play Ended.                |');
+      print('|-------------------------------------------|');
+      print('| Winner team: $winner1 and $winner2');
+
+    }
+
 
     String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
     String team2 = game.teams[1][0].name + ' and ' + game.teams[1][1].name;
     var team1Pts = game.teams[0][0].points;
     var team2Pts = game.teams[1][0].points;
-
-    print('|===========================================|');
-    print('|                Play Ended.                |');
-    print('|-------------------------------------------|');
-    print('| Winner team is: $winner1 and $winner2');
+  
     print('|===========================================|');
     print('| First to 2 points wins. Points per team:');
     print('| Team $team1 -> $team1Pts');
@@ -230,8 +321,17 @@ void main(){
   // croupier
   croupier([p1, p2, p3, p4], 3, deck);
 
+  // get manilha
+  String manilha = manilhaFinder(deck[0]);
+  deck.removeAt(0);
+
+
   // create game
-  Game game = new Game([[p1, p3], [p2, p4]]);
+  Game game = new Game([[p1, p3], [p2, p4]], manilha);
+
+  // check if any players have a manilha and if they do, update it's trueValue to 11
+  // before opening an issue, read the comments on the manilhaUpdater() function, thank you
+  manilhaUpdater(game);
 
 
   clearTerminal();
@@ -239,6 +339,8 @@ void main(){
   print('|=========================|');
   print('|  New Round Starting...  |');
   print('|=========================|');
+  print('| Manilha: $manilha');
+  print('|-------------------------|');
   stdout.write('Press enter to continue: ');
 
   // detect key press

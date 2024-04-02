@@ -1,7 +1,7 @@
 
 import "deckgen.dart";
 
-int cardbattle(List<Card> cards){
+int cardbattle(List<Card> cards, bool useSuitWhenTied){
 
   int face1 = cards[0].trueValue;
   int face2 = cards[1].trueValue;
@@ -17,8 +17,8 @@ int cardbattle(List<Card> cards){
 
     return 2;
 
-  // if both have the same face value
-  }else{
+  // if both have the same face value AND useSuitWhenTied is true
+  }else if(useSuitWhenTied == true){
 
     if(suit1 > suit2){
 
@@ -28,12 +28,16 @@ int cardbattle(List<Card> cards){
 
       return 2;
 
-    // if both are the same card
+    // if both have the same suit AND useSuitWhenTied is true
     }else{
 
       return 0;
       
     }
+    // if both have the same face AND useSuitWhenTied is false
+  }else{
+
+    return 0;
   }
 
 }
