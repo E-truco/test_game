@@ -269,9 +269,8 @@ List<int> round(Game game){
 
     clearTerminal();
 
-  } // round ends (3 wins for game win)
+  } // round ends (12 wins for game win)
 
-  print('round ended.');
 
   // string with the names of the players in each team
   String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
@@ -303,10 +302,16 @@ List<int> round(Game game){
     print('|-------------------------------------------|');
     print('| Winner team: $winnerTeam');
     print('|-------------------------------------------|');
-    print('| First to 2 points won. Points per team:');
-    print('| Team $team1 -> $team1Pts');
-    print('| Team $team2 -> $team2Pts');
+    print('| First to 2 play wins won the round.');
+    print('| Team $team1 -> $team1Pts plays won.');
+    print('| Team $team2 -> $team2Pts plays won.');
     print('|===========================================|');
+    stdout.write('Press enter to continue: ');
+
+    // detect key press
+    stdin.readLineSync();
+
+    clearTerminal();
 
 
   
