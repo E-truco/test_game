@@ -273,45 +273,47 @@ List<int> round(Game game){
 
 
   // string with the names of the players in each team
-  String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
-  String team2 = game.teams[1][0].name + ' and ' + game.teams[1][1].name;
+  // String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
+  // String team2 = game.teams[1][0].name + ' and ' + game.teams[1][1].name;
 
   // count the points of each team
   var team1Pts = game.teams[0][0].points;
   var team2Pts = game.teams[1][0].points;
 
-  var winnerTeam;
+  // var winnerTeam;
   var winnerTeamIndex;
 
   // if first team won
   if(team1Pts > team2Pts){
     
-    winnerTeam = team1;
+    // winnerTeam = team1;
     winnerTeamIndex = 0;
 
   // if second team won
   }else{
 
-    winnerTeam = team2;
+    // winnerTeam = team2;
     winnerTeamIndex = 1;
   }
 
 
-    print('|===========================================|');
-    print('|                Round Ended                |');
-    print('|-------------------------------------------|');
-    print('| Winner team: $winnerTeam');
-    print('|-------------------------------------------|');
-    print('| First to 2 play wins won the round.');
-    print('| Team $team1 -> $team1Pts plays won.');
-    print('| Team $team2 -> $team2Pts plays won.');
-    print('|===========================================|');
-    stdout.write('Press enter to continue: ');
+    // THIS IS NOT NEEDED ANYMORE AS THE ROUND ENDED TEXT IS PRINTED BY gameHandler()
+    // I WON'T DELETE THIS FOR NOW AS THE CODE HAS NOT BEEN PROPERLY TESTED YET.
+    // print('|===========================================|');
+    // print('|                Round Ended                |');
+    // print('|-------------------------------------------|');
+    // print('| Winner team: $winnerTeam');
+    // print('|-------------------------------------------|');
+    // print('| First to 2 play wins won the round.');
+    // print('| Team $team1 -> $team1Pts plays won.');
+    // print('| Team $team2 -> $team2Pts plays won.');
+    // print('|===========================================|');
+    // stdout.write('Press enter to continue: ');
 
-    // detect key press
-    stdin.readLineSync();
+    // // detect key press
+    // stdin.readLineSync();
 
-    clearTerminal();
+    // clearTerminal();
 
 
   
@@ -427,14 +429,51 @@ void gameHandler(){
     // round should return the winning team and also the amount of points that team got
     // -------- !TO-DO! --------------------------------------------------------------------
 
-    // here, before a new round starts, print how many rounds each team won
-
     // start a round
     // return value is [indexOfWinnerTeam, amountOfPoints]
     List<int> latestRound = round(game);
 
     // update the amount of points per team
     pointsPerTeam[latestRound[0]] = latestRound[1];
+
+
+    // here, before a new round starts, print how many rounds each team won
+
+    var latestRoundPointsWorth = latestRound[1];
+    var latestWinnerTeamIndex = latestRound[0];
+    var latestWinnerTeamNames;
+
+    var team1Names = p1.name + ' and ' + p3.name;
+    var team2Names = p2.name + ' and ' + p4.name;
+
+    var team1Points = pointsPerTeam[0];
+    var team2Points = pointsPerTeam[1];
+
+    if(latestWinnerTeamIndex == 0){
+      
+      latestWinnerTeamNames = team1Names;
+
+    }else{
+
+      latestWinnerTeamNames = team2Names;
+
+    }
+
+    print('|===========================================|');
+    print('|                Round Ended                |');
+    print('|-------------------------------------------|');
+    print('| $latestRoundPointsWorth points awarded to $latestWinnerTeamNames');
+    print('|-------------------------------------------|');
+    print('| First to 12 points wins the game!');
+    print('| Team $team1Names -> $team1Points points.');
+    print('| Team $team2Names -> $team2Points points.');
+    print('|===========================================|');
+    stdout.write('Press enter to continue: ');
+
+    // detect key press
+    stdin.readLineSync();
+
+    clearTerminal();
 
     // this is the end of the rounds loop, if none of the teams have 12 points, it will run again
     // if one of the teams got to 12 points, it will stop
