@@ -33,7 +33,6 @@ void clearTerminal(){
 void displayHand(List<Card> hand){
 
   print("Your hand:");
-  print("----------------------------------------------");
 
   for(int i = 0; i < hand.length; i++){
     Card currentCard = hand[i];
@@ -94,6 +93,20 @@ void manilhaUpdater(Game game){
 
 void round(Game game){
 
+  String manilha = game.manilha;
+
+  print('|=========================|');
+  print('|  New Round Starting...  |');
+  print('|=========================|');
+  print('| Manilha: $manilha');
+  print('|-------------------------|');
+  stdout.write('Press enter to continue: ');
+
+  // detect key press
+  stdin.readLineSync();
+
+  clearTerminal();
+
   // check if any of the teams have reached 2 points by checking the amount of points of the first player of that team
   // when the while loop ends, a team will have won the round
   while(game.teams[0][0].points < 2 && game.teams[1][0].points < 2){
@@ -129,16 +142,18 @@ void round(Game game){
       print("==============================================");
       print("It's $currentPlayerName's turn.");
       print("==============================================");
-  
+
+
+      var tempManilha = game.manilha;
+      print('Manilha: $tempManilha');
+      print("----------------------------------------------");
+
+
       if(pile.length > 0){
         Card topOfPile = pile[0];
         print("Top of the pile: $topOfPile");
         print("----------------------------------------------");
       }
-
-      var tempManilha = game.manilha;
-      print('| Manilha: $tempManilha');
-      print("----------------------------------------------");
 
       displayHand(currentPlayer.hand);
       stdout.write("Choose a card to play by typing it's index: ");
@@ -336,18 +351,7 @@ void main(){
 
   clearTerminal();
 
-  print('|=========================|');
-  print('|  New Round Starting...  |');
-  print('|=========================|');
-  print('| Manilha: $manilha');
-  print('|-------------------------|');
-  stdout.write('Press enter to continue: ');
-
-  // detect key press
-  stdin.readLineSync();
-
-  clearTerminal();
-
+  // start a round
   round(game);
 
 }
