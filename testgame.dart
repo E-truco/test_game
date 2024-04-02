@@ -418,11 +418,16 @@ void gameHandler(){
 
     clearTerminal();
 
+
+    // -------- !TO-DO! --------------------------------------------------------------------
     // instead of starting a round, start a game via gameHandler()
     // game will have part of the logic that is currently on this main function, as each game will have a different deck
     // game will start a round and keep track of rounds won
     // round will keep track of truco calls
     // round should return the winning team and also the amount of points that team got
+    // -------- !TO-DO! --------------------------------------------------------------------
+
+    // here, before a new round starts, print how many rounds each team won
 
     // start a round
     // return value is [indexOfWinnerTeam, amountOfPoints]
