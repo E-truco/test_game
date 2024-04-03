@@ -91,7 +91,15 @@ void manilhaUpdater(Game game){
 
 }
 
-void round(Game game){
+List<int> round(Game game){
+
+  int pointsWorth = 1;
+
+  // set all players' points to 0
+  game.teams[0][0].points = 0;
+  game.teams[0][1].points = 0;
+  game.teams[1][0].points = 0;
+  game.teams[1][1].points = 0;
 
   String manilha = game.manilha;
 
@@ -261,28 +269,71 @@ void round(Game game){
 
     clearTerminal();
 
-  } // round ends (3 wins for game win)
+  } // round ends (12 wins for game win)
 
-  print('round ended.');
+
+  // string with the names of the players in each team
+  // String team1 = game.teams[0][0].name + ' and ' + game.teams[0][1].name;
+  // String team2 = game.teams[1][0].name + ' and ' + game.teams[1][1].name;
+
+  // count the points of each team
+  var team1Pts = game.teams[0][0].points;
+  var team2Pts = game.teams[1][0].points;
+
+  // var winnerTeam;
+  var winnerTeamIndex;
+
+  // if first team won
+  if(team1Pts > team2Pts){
+    
+    // winnerTeam = team1;
+    winnerTeamIndex = 0;
+
+  // if second team won
+  }else{
+
+    // winnerTeam = team2;
+    winnerTeamIndex = 1;
+  }
+
+
+    // THIS IS NOT NEEDED ANYMORE AS THE ROUND ENDED TEXT IS PRINTED BY gameHandler()
+    // I WON'T DELETE THIS FOR NOW AS THE CODE HAS NOT BEEN PROPERLY TESTED YET.
+    // print('|===========================================|');
+    // print('|                Round Ended                |');
+    // print('|-------------------------------------------|');
+    // print('| Winner team: $winnerTeam');
+    // print('|-------------------------------------------|');
+    // print('| First to 2 play wins won the round.');
+    // print('| Team $team1 -> $team1Pts plays won.');
+    // print('| Team $team2 -> $team2Pts plays won.');
+    // print('|===========================================|');
+    // stdout.write('Press enter to continue: ');
+
+    // // detect key press
+    // stdin.readLineSync();
+
+    // clearTerminal();
+
+
   
+  // the return of round() is a list of two ints
+  // first int is the index of the winning team
+  // second int is the amount of points
+  return [winnerTeamIndex ,pointsWorth];
+
 }
 
 
-void main(){
+void gameHandler(){
 
-  print('|=========================|');
-  print('|         E-Truco         |');
-  print('|-------------------------|');
-  print('|        Test Game        |');
-  print('|=========================|');
-  print('');
-  stdout.write('Press enter to continue: ');
+  // both teams start with zero points
+  // game ends when one reaches 12
+  List<int> pointsPerTeam = [0, 0];
 
-  // detect key press
-  stdin.readLineSync();
-
-  clearTerminal();
-  
+  // --------------
+  // setup begins
+  // --------------
 
   // create players
   // teams will be: p1 and p3 / p2 and p4
@@ -325,33 +376,156 @@ void main(){
 
   // detect key press
   stdin.readLineSync();
-  
 
-  // create deck
-  List<Card> deck = deckgen(["4", "5", "6", "7", "10", "11", "12", "1", "2", "3"], ["Moles", "Espadas", "Copas", "Paus"]);
-
-  // shuffle deck
-  deck = shuffler(deck, 1);
-
-  // croupier
-  croupier([p1, p2, p3, p4], 3, deck);
-
-  // get manilha
-  String manilha = manilhaFinder(deck[0]);
-  deck.removeAt(0);
+  // -------------
+  // setup ends
+  // -------------
 
 
-  // create game
-  Game game = new Game([[p1, p3], [p2, p4]], manilha);
+  int pointsTeam0 = 0;
+  int pointsTeam01 = 0;
 
-  // check if any players have a manilha and if they do, update it's trueValue to 11
-  // before opening an issue, read the comments on the manilhaUpdater() function, thank you
-  manilhaUpdater(game);
+  // each loop is a round
+  // while none of the teams have reached 12 points, start a new round
+  while(pointsTeam0 < 12 && pointsTeam01 < 12){
 
+
+    // create deck
+    List<Card> deck = deckgen(["4", "5", "6", "7", "10", "11", "12", "1", "2", "3"], ["Moles", "Espadas", "Copas", "Paus"]);
+
+    // shuffle deck
+    deck = shuffler(deck, 1);
+
+    // make sure all players have empty hands
+    p1.hand = [];
+    p2.hand = [];
+    p3.hand = [];
+    p4.hand = [];
+
+    // croupier
+    croupier([p1, p2, p3, p4], 3, deck);
+
+    // get manilha
+    String manilha = manilhaFinder(deck[0]);
+    deck.removeAt(0);
+
+
+   // create game
+    Game game = new Game([[p1, p3], [p2, p4]], manilha);
+
+    // check if any players have a manilha and if they do, update it's trueValue to 11
+    // before opening an issue, read the comments on the manilhaUpdater() function, thank you
+    manilhaUpdater(game);
+
+
+    clearTerminal();
+
+
+    // -------- !TO-DO! --------------------------------------------------------------------
+    // instead of starting a round, start a game via gameHandler()
+    // game will have part of the logic that is currently on this main function, as each game will have a different deck
+    // game will start a round and keep track of rounds won
+    // round will keep track of truco calls
+    // round should return the winning team and also the amount of points that team got
+    // -------- !TO-DO! --------------------------------------------------------------------
+
+    // start a round
+    // return value is [indexOfWinnerTeam, amountOfPoints]
+    List<int> latestRound = round(game);
+
+    // update the amount of points per team
+    pointsPerTeam[latestRound[0]] = latestRound[1];
+
+
+    // here, before a new round starts, print how many rounds each team won
+
+    var latestRoundPointsWorth = latestRound[1];
+    var latestWinnerTeamIndex = latestRound[0];
+    var latestWinnerTeamNames;
+
+    var team1Names = p1.name + ' and ' + p3.name;
+    var team2Names = p2.name + ' and ' + p4.name;
+
+    var team1Points = pointsPerTeam[0];
+    var team2Points = pointsPerTeam[1];
+
+    if(latestWinnerTeamIndex == 0){
+      
+      latestWinnerTeamNames = team1Names;
+
+    }else{
+
+      latestWinnerTeamNames = team2Names;
+
+    }
+
+    print('|===========================================|');
+    print('|                Round Ended                |');
+    print('|-------------------------------------------|');
+    print('| $latestRoundPointsWorth points awarded to $latestWinnerTeamNames');
+    print('|-------------------------------------------|');
+    print('| First to 12 points wins the game!');
+    print('| Team $team1Names -> $team1Points points.');
+    print('| Team $team2Names -> $team2Points points.');
+    print('|===========================================|');
+    stdout.write('Press enter to continue: ');
+
+    // detect key press
+    stdin.readLineSync();
+
+    clearTerminal();
+
+    // this is the end of the rounds loop, if none of the teams have 12 points, it will run again
+    // if one of the teams got to 12 points, it will stop
+  }
+
+  var gameWinnerTeam;
+
+  String team1Names = p1.name + ' and ' + p3.name;
+  String team2Names = p2.name + ' and ' + p4.name;
+
+  int gamePointsTeam1 = pointsPerTeam[0];
+  int gamePointsTeam2 = pointsPerTeam[1];
+
+  // if first team won the game
+  if(pointsPerTeam[0] > pointsPerTeam[1]){
+
+    gameWinnerTeam = team1Names;
+
+  // if second team won the game
+  }else{
+
+    gameWinnerTeam = team2Names;
+  }
+
+  print('|===========================================|');
+  print('|                Game Ended.                |');
+  print('|-------------------------------------------|');
+  print('| Winner team: $gameWinnerTeam');
+  print('|-------------------------------------------|');
+  print('| First to 12 points won. Points per team:');
+  print('| Team $team1Names -> $gamePointsTeam1');
+  print('| Team $team2Names -> $gamePointsTeam2');
+  print('|===========================================|');
+
+}
+
+
+void main(){
+
+  print('|=========================|');
+  print('|         E-Truco         |');
+  print('|-------------------------|');
+  print('|        Test Game        |');
+  print('|=========================|');
+  print('');
+  stdout.write('Press enter to continue: ');
+
+  // detect key press
+  stdin.readLineSync();
 
   clearTerminal();
-
-  // start a round
-  round(game);
+  
+  gameHandler();
 
 }
